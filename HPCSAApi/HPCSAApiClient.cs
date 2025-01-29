@@ -4,6 +4,7 @@ using RestSharp;
 namespace HPCSAApi {
     public interface IHPCSAApiClient {
         IRegisterSearch RegisterSearch { get; }
+        IFullDetails FullDetails { get; }
     }
 
     public class HPCSAApiClient : IHPCSAApiClient {
@@ -15,5 +16,6 @@ namespace HPCSAApi {
         }
 
         public IRegisterSearch RegisterSearch => new RegisterSearch(client);
+        public IFullDetails FullDetails => new FullDetails();
     }
 }
