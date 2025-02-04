@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using HPCSAApi.Models;
 using HPCSAApi.Utils;
 using HtmlAgilityPack;
-using RestSharp;
 
 namespace HPCSAApi.Actions {
     public interface IFullDetails {
