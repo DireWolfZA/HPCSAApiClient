@@ -10,11 +10,18 @@ namespace HPCSAApi.Actions {
         Task<FullDetailsResponse> Get(string registrationNumberFromSearch);
     }
     public class FullDetails : IFullDetails {
+        public const string HPCSAErrorPrefix = "HPCSA Error: ";
+
         // GET https://hpcsaonline.custhelp.com/app/iregister_details/reg_number/{number}
         public async Task<FullDetailsResponse> Get(string registrationNumberFromSearch) {
             string url = "https://hpcsaonline.custhelp.com/app/iregister_details/reg_number/" + UrlEncoder.Default.Encode(registrationNumberFromSearch);
             var doc = await new HtmlWeb().LoadFromWebAsync(url);
             var document = doc.DocumentNode;
+
+            var titleNode = document.SelectSingleNode("/html/head/title")
+                ?? throw new ApplicationException(HPCSAErrorPrefix + "Cannot find Title element!").WithContent(document.OuterHtml);
+            if (titleNode?.InnerText != "Support Home Page") // when the site is working, page title will be 'Support Home Page'. Otherwise throw error with page title as message
+                throw new ApplicationException(HPCSAErrorPrefix + titleNode.InnerHtml).WithContent(document.OuterHtml);
 
             HtmlNode containerNode = null;
             foreach (string xpath in new[] {
@@ -28,7 +35,7 @@ namespace HPCSAApi.Actions {
                     break;
             }
             if (containerNode == null)
-                throw new ApplicationException("Cannot find results in document!").WithContent(document.OuterHtml);
+                throw new ApplicationException(HPCSAErrorPrefix + "Cannot find results in document!").WithContent(document.OuterHtml);
 
 
             var rtn = new FullDetailsResponse {
@@ -38,7 +45,7 @@ namespace HPCSAApi.Actions {
                 PostCode = containerNode.SelectSingleNode("//p[@id='POSTCODE']").InnerText
             };
             if (rtn.Name.Equals("iRegisterDetails_27", StringComparison.InvariantCultureIgnoreCase))
-                throw new ApplicationException("No results found!").WithContent(document.OuterHtml);
+                throw new ApplicationException(HPCSAErrorPrefix + "No results found!").WithContent(document.OuterHtml);
 
 
             HtmlNode registrationNode = null;
