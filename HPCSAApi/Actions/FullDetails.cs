@@ -20,10 +20,10 @@ namespace HPCSAApi.Actions {
 
             var titleNode = document.SelectSingleNode("/html/head/title")
                 ?? throw new ApplicationException(HPCSAErrorPrefix + "Cannot find Title element!").WithContent(document.OuterHtml);
-            if (titleNode?.InnerText != "Support Home Page") // when the site is working, page title will be 'Support Home Page'. Otherwise throw error with page title as message
+            if (titleNode.InnerText != "Support Home Page") // when the site is working, page title will be 'Support Home Page'. Otherwise throw error with page title as message
                 throw new ApplicationException(HPCSAErrorPrefix + titleNode.InnerHtml).WithContent(document.OuterHtml);
 
-            HtmlNode containerNode = null;
+            HtmlNode? containerNode = null;
             foreach (string xpath in new[] {
                 "//div[@id='rn_iRegisterDetails_27']",
                 "/html/body/div/div/div/div/div[@id='rn_iRegisterDetails_27']",
@@ -48,18 +48,18 @@ namespace HPCSAApi.Actions {
                 throw new ApplicationException(HPCSAErrorPrefix + "No results found!").WithContent(document.OuterHtml);
 
 
-            HtmlNode registrationNode = null;
+            HtmlNode? registrationNode = null;
             foreach (string xpath in new[] {
                 "div[@class='registration']",
                 "//div[@class='registration']",
                 "div[5]",
             }) {
                 registrationNode = containerNode.SelectSingleNode(xpath);
-                if (containerNode != null)
+                if (registrationNode != null)
                     break;
             }
             if (registrationNode != null) {
-                FullDetailsRegistration currentRegistration = null;
+                FullDetailsRegistration? currentRegistration = null;
                 foreach (var node in registrationNode.ChildNodes) {
                     if (node.Name != "table" && node.Name != "div")
                         continue;
@@ -77,8 +77,7 @@ namespace HPCSAApi.Actions {
                         };
                     }
                     if (node.Name == "div" && node.Attributes["class"].Value == "qualification") {
-                        if (currentRegistration == null)
-                            currentRegistration = new FullDetailsRegistration();
+                        currentRegistration ??= new FullDetailsRegistration();
 
                         var dataNode = node.SelectSingleNode("table");
                         foreach (var row in dataNode.SelectNodes("tr")) {
@@ -94,8 +93,7 @@ namespace HPCSAApi.Actions {
                         }
                     }
                     if (node.Name == "div" && node.Attributes["class"].Value == "category") {
-                        if (currentRegistration == null)
-                            currentRegistration = new FullDetailsRegistration();
+                        currentRegistration ??= new FullDetailsRegistration();
 
                         var dataNode = node.SelectSingleNode("table");
                         foreach (var row in dataNode.SelectNodes("tr")) {

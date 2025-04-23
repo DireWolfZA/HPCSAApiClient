@@ -6,7 +6,7 @@ using RestSharp;
 
 namespace HPCSAApi.Actions {
     public interface IRegisterSearch {
-        Task<SearchResponse> Search(string registrationNumber, string firstname = null, string surname = null, string city = null, string postcode = null, string register = null, string category = null);
+        Task<SearchResponse> Search(string registrationNumber, string? firstname = null, string? surname = null, string? city = null, string? postcode = null, string? register = null, string? category = null);
     }
     public class RegisterSearch : IRegisterSearch {
         private readonly RestClient client;
@@ -15,7 +15,7 @@ namespace HPCSAApi.Actions {
         }
 
         // curl 'https://hpcsaonline.custhelp.com/cc/ReportController/getDataFromRnow' -X POST -H 'Content-Type: application/x-www-form-urlencoded; charset=UTF-8' --data-raw 'regNumber={number}&firstName=&surName=&city=&postalCode=&register=&category='
-        public async Task<SearchResponse> Search(string registrationNumber, string firstname = null, string surname = null, string city = null, string postcode = null, string register = null, string category = null) {
+        public async Task<SearchResponse> Search(string registrationNumber, string? firstname = null, string? surname = null, string? city = null, string? postcode = null, string? register = null, string? category = null) {
             var request = new RestRequest("cc/ReportController/getDataFromRnow", Method.Post)
                 .AddParameter("regNumber", registrationNumber)
                 .AddParameter("firstName", firstname)
@@ -59,17 +59,18 @@ namespace HPCSAApi.Actions {
             var categoryOrder = headers["Category"].Order;
             var statusOrder = headers["Status"].Order;
 
-            foreach (var result in response.Data)
-                rtn.Results.Add(new SearchResult() {
-                    Title = result[titleOrder].GetString(),
-                    Surname = result[surnameOrder].GetString(),
-                    Firstname = result[firstnameOrder].GetString(),
-                    RegistrationNumber = result[registrationNumberOrder].GetString(),
-                    City = result[cityOrder].GetString(),
-                    PostalCode = result[postalCodeOrder].GetString(),
-                    Category = result[categoryOrder].GetString(),
-                    Status = result[statusOrder].GetString(),
-                });
+            if (response.Data != null)
+                foreach (var result in response.Data)
+                    rtn.Results.Add(new SearchResult() {
+                        Title = result[titleOrder].GetString(),
+                        Surname = result[surnameOrder].GetString(),
+                        Firstname = result[firstnameOrder].GetString(),
+                        RegistrationNumber = result[registrationNumberOrder].GetString(),
+                        City = result[cityOrder].GetString(),
+                        PostalCode = result[postalCodeOrder].GetString(),
+                        Category = result[categoryOrder].GetString(),
+                        Status = result[statusOrder].GetString(),
+                    });
 
             return rtn;
         }

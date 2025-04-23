@@ -4,14 +4,14 @@ using System.Text.Json.Serialization;
 namespace HPCSAApi.Models {
     public class SearchResultApiResponse {
         [JsonPropertyName("data")]
-        public List<List<System.Text.Json.JsonElement>> Data { get; set; }
+        public List<List<System.Text.Json.JsonElement>>? Data { get; set; }
         [JsonPropertyName("headers")]
-        public List<Header> Headers { get; set; }
+        public List<Header>? Headers { get; set; }
         public class Header {
             [JsonPropertyName("heading")]
-            public string Heading { get; set; }
+            public string? Heading { get; set; }
             [JsonPropertyName("width")]
-            public object Width { get; set; }
+            public object? Width { get; set; }
             [JsonPropertyName("data_type")]
             public int DataType { get; set; }
             [JsonPropertyName("col_id")]
@@ -19,7 +19,7 @@ namespace HPCSAApi.Models {
             [JsonPropertyName("order")]
             public int Order { get; set; }
             [JsonPropertyName("col_definition")]
-            public string ColDefinition { get; set; }
+            public string? ColDefinition { get; set; }
             [JsonPropertyName("visible")]
             public bool Visible { get; set; }
         }
@@ -46,18 +46,18 @@ namespace HPCSAApi.Models {
         [JsonPropertyName("report_id")]
         public int ReportID { get; set; }
         [JsonPropertyName("search_term")]
-        public string SearchTerm { get; set; }
+        public string? SearchTerm { get; set; }
         [JsonPropertyName("grouped")]
         public int Grouped { get; set; }
         [JsonPropertyName("exceptions")]
-        public List<object> Exceptions { get; set; }
+        public List<object>? Exceptions { get; set; }
         [JsonPropertyName("page")]
         public int Page { get; set; }
         [JsonPropertyName("error")]
-        public object Error { get; set; }
+        public object? Error { get; set; }
         [JsonPropertyName("spelling")]
-        public string Spelling { get; set; }
+        public string? Spelling { get; set; }
         [JsonPropertyName("not_dict")]
-        public string NotDict { get; set; }
+        public string? NotDict { get; set; }
     }
 }
