@@ -11,6 +11,7 @@
     <Title>HPCSA API</Title>
     <Description>API Client for the HPCSA Registration Search</Description>
     <Authors>Dire Wolf</Authors>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://hpcsaonline.custhelp.com/app/i_reg_form</PackageProjectUrl>
@@ -20,10 +21,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\logo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <ItemGroup>
