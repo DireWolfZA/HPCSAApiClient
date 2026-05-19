@@ -1,21 +1,21 @@
 using HPCSAApi.Actions;
 using RestSharp;
 
-namespace HPCSAApi {
-    public interface IHPCSAApiClient {
-        IRegisterSearch RegisterSearch { get; }
-        IFullDetails FullDetails { get; }
+namespace HPCSAApi;
+
+public interface IHPCSAApiClient {
+    IRegisterSearch RegisterSearch { get; }
+    IFullDetails FullDetails { get; }
+}
+
+public class HPCSAApiClient : IHPCSAApiClient {
+    private readonly RestClient client;
+
+    public HPCSAApiClient() {
+        client = new RestClient("https://hpcsaonline.custhelp.com");
+        client.AddDefaultHeader("Accept", "application/json");
     }
 
-    public class HPCSAApiClient : IHPCSAApiClient {
-        private readonly RestClient client;
-
-        public HPCSAApiClient() {
-            client = new RestClient("https://hpcsaonline.custhelp.com");
-            client.AddDefaultHeader("Accept", "application/json");
-        }
-
-        public IRegisterSearch RegisterSearch => new RegisterSearch(client);
-        public IFullDetails FullDetails => new FullDetails();
-    }
+    public IRegisterSearch RegisterSearch => new RegisterSearch(client);
+    public IFullDetails FullDetails => new FullDetails();
 }
